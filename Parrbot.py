@@ -15,12 +15,14 @@ bot = commands.Bot(command_prefix ='!')
 
 UserArr = []
 userMsg = []
+
 #stores messages from a user in a dict
 def msgMaker():
      userMsgDict = {}
      for i in range(len(UserArr)):
           userMsgDict[UserArr[i]] = userMsg[i]
      return userMsgDict
+
 #look over me to make sure that the reactions work properly (EMOJIS ARE WRONG TODO: FIX EMOJIS)
 #allows user to prompt out of polly's shenanigans
 @client.event
@@ -38,14 +40,13 @@ async def on_member_join(member):
 async def on_ready():
      print(f'{client.user.name} has connected to discord.')
 
-#gets list of users, so a dict can be created that'll let the user get a value
-@client.event
 
 #this is for storing a random message from a user
 @client.event
 async def on_message(message):
      if message.author == client.user:
           return
+     
      pollychance = rand.randint(1,10)
      if pollychance == 1:
           #stores message to a text file
@@ -67,6 +68,25 @@ async def sendMsg(message):
      elif message.content == 'raise-exception':
           raise discord.DiscordException
 
-      
+#stitches two random messages together. (make sure that this happens at a space, and not inside of a word)
+@bot.command(name="Stitch", help="Stitches two messages together")
+async def stitch(ctx, message):
+     pass
+
+#reverses a random users message
+@bot.command(name="Reverse", help="reverses a user's message")
+async def reversal(cxt, message):
+     await cxt.send(message[::-1])
+
+
+#tells how long a message is to shame chronic yappers
+@bot.command(name="MSGLen" help="returns the length of a message")
+async def MSGLen(cxt, message):
+     cxt.send("this message is ", len(message) , " letters long. SQUAWK!")
+
+#repeats what the user passed to it.
+@bot.command()
+async def repeat(ctx, msg):
+     await ctx.send(msg)
 
 client.run(TOKEN)
