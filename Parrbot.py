@@ -13,9 +13,9 @@ load_dotenv()
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 
-bot = commands.Bot(command_prefix ='!')
+bot = commands.Bot(intents=discord.Intents.default(), command_prefix ='!')
 
 #this array holds usernames. 
 UserArr = []
