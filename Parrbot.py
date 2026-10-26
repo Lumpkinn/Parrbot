@@ -20,7 +20,7 @@ bot = commands.Bot(command_prefix ='!')
 #this array holds usernames. 
 UserArr = []
 
-#look over me to make sure that the reactions work properly (EMOJIS ARE WRONG TODO: FIX EMOJIS)
+#TODO: are emojis working????
 #allows user to prompt out of polly's shenanigans
 @client.event
 async def on_member_join(member):
