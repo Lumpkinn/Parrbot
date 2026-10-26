@@ -17,16 +17,8 @@ client = discord.Client()
 
 bot = commands.Bot(command_prefix ='!')
 
-#these arrays are meant to hold usernames and messages
+#this array holds usernames. 
 UserArr = []
-
-
-#stores messages from a user in a dict
-def msgMaker():
-     userMsgDict = {}
-     for i in range(len(UserArr)):
-          userMsgDict[UserArr[i]] = userMsg[i]
-     return userMsgDict
 
 #look over me to make sure that the reactions work properly (EMOJIS ARE WRONG TODO: FIX EMOJIS)
 #allows user to prompt out of polly's shenanigans
@@ -47,7 +39,7 @@ async def on_ready():
      print(f'{client.user.name} has connected to discord.')
 
 
-#this is for storing a random message from a user TODO: make sure that people who've opted out are not included (I think that's already happened, but i need to trace to be sure)
+#this is for storing a random message from a user 
 @client.event
 async def on_message(ctx, message):
      if message.author == client.user:
@@ -74,10 +66,15 @@ async def sendMsg(message):
           return
      
      if message.content == "polly" or message.content == "Polly":
-          parrottedmsg = rand.choice(userMsg)
-          if parrottedmsg == null:
-               await asyncio.sleep(rand.uniform(2,3))
-               message.channel.send("I haven't heard anything yet. SQUAWK!")
+          #have it search inside of the array
+          try:     
+               randmsg = rand.randint(0,UserArr.length)
+               parrottedmsg = UserArr[randmsg]
+               parrottedmsg = rand.choice(parrottedmsg)
+          except:    
+               if parrottedmsg == None:
+                    await asyncio.sleep(rand.uniform(2,3))
+                    message.channel.send("I haven't heard anything yet. SQUAWK!")
 
           await asyncio.sleep(rand.uniform(5,9))
           await message.channel.send(parrottedmsg + " SQUAWK!")
@@ -90,8 +87,37 @@ async def sendMsg(message):
 @bot.command(name="Stitch", help="Stitches two messages together")
 async def stitch(ctx, message):
      #ALRIGHT, If you wanna add this, you need to have the message storage handled first. after that, you can user .split(" ") <- (theres a space inbetween) to split all of them into different strings, and place them into a list. i think you can take it from there.
+     #TODO: get two random messages, and then use .split(" "), get random indexes inside of lists, concatenate the strings, and then return them
+     try:     
+          randmsg = rand.randint(0,UserArr.length)
+          parrottedmsg = UserArr[randmsg]
+          parrottedmsg = rand.choice(parrottedmsg)
+     except:    
+          if parrottedmsg == None:
+               await asyncio.sleep(rand.uniform(2,3))
+               message.channel.send("I haven't heard anything yet. SQUAWK!")
+     #its alive!!!
+     frankenparrot = parrottedmsg.split(" ")
+
+     try:     
+          randmsg = rand.randint(0,UserArr.length)
+          parrottedmsg = UserArr[randmsg]
+          parrottedmsg = rand.choice(parrottedmsg)
+     except:    
+          if parrottedmsg == None:
+               await asyncio.sleep(rand.uniform(2,3))
+               message.channel.send("I haven't heard anything yet. SQUAWK!")
+     #The most annoying person you know really likes correcting people about this
+     FrankenparrotMonster = parrottedmsg.split(" ")
+     frankenparrotExperiment = ""
+     for i in range (0,5):
+          randIndex = rand.randint(0, frankenparrot.length)
+          frankenparrotExperiment = frankenparrotExperiment + frankenparrot[randIndex] 
+          frankenparrotExperiment = frankenparrotExperiment + FrankenparrotMonster[randIndex]
+          
+
      await asyncio.sleep(rand.uniform(5,10))
-     pass
+     await message.send(frankenparrotExperiment)
 
 #reverses a random users message
 @bot.command(name="Reverse", help="reverses a user's message")
