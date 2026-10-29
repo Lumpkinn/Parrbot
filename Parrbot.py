@@ -1,28 +1,37 @@
+#TODO: The long and short of the issue is that the .env file is jsut giving me the wrong key for some reason. that and the fact that I don't know how to call commands
+#TODO: fix the commands. after thats done, i can push.
 
-#TODO: Message storage is busted, fix that, the other menial issues, make the art, and ship 
+
+#Make sure to have the commands with arguments return stuff
 
 # parrbot.py
 import os, random as rand
 import discord
 import asyncio
 from dotenv import load_dotenv
-
 from discord.ext import commands
 
 load_dotenv()
 
-TOKEN = os.getenv('DISCORD_TOKEN')
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-client = discord.Client(intents=discord.Intents.default())
+GUILD = os.getenv("DISCORD_GUILD")
 
-bot = commands.Bot(intents=discord.Intents.default(), command_prefix ='!')
+intent = discord.Intents.default()
+
+intent.reactions = True
+
+intent.message_content = True
+
+
+bot = commands.Bot(command_prefix ='$', intents= intent)
 
 #this array holds usernames. 
 UserArr = []
 
 #TODO: are emojis working????
 #allows user to prompt out of polly's shenanigans
-@client.event
+@bot.event
 async def on_member_join(member):
      UserIsOptin = True
      await member.create_dm()
@@ -34,58 +43,71 @@ async def on_member_join(member):
           UserArr.append(member)
 
 #informs me when bot is connected
-@client.event
+@bot.event
 async def on_ready():
-     print(f'{client.user.name} has connected to discord.')
+     print(f'{bot.user.name}', "has connected to discord." '\n f{guild.name}(id: {guild.id})')
 
 
 #this is for storing a random message from a user 
-@client.event
-async def on_message(ctx, message):
-     if message.author == client.user:
-          return
+@bot.event
+async def on_message(message):
      
+     #if ctx.author == client.user:
+     #     print ("huh")
+     #     return
      pollychance = rand.randint(1,10)
-     if pollychance == 1:
+     print(pollychance)
+     if message.content[0] == '!':
+          return
+     if pollychance == 1:     
           #stores message to a text file
-          file = open("messages.txt", 'a')
-          file.write(message.content +'\n')
-          file.close()
-          UserArr.append(message.author)
+          UserArr.append(str(message.content))
           await message.add_reaction('🦜')
-          indexOfUser = UserArr.indexof(message.author)
-          UserArr[indexOfUser] = [message]
-
+     print(UserArr) 
+     await bot.process_commands(message)
+ 
+@bot.command()
+async def ping(ctx):
+    """Replies with Pong! and the bot's latency."""
+    latency = round(bot.latency * 1000)  # Latency in milliseconds
+    await ctx.send(f'Pong! {latency}ms')
+                
+#test
+@bot.event
+async def message(ctx, message):
+     botMessage = (str(message.author), ' just said ', str(message.content))
+     print(botMessage)
+     
           
+     await bot.process_commands(message)
+
 
 #Random message getter 
-@bot.command(name="Parrot message", help='Sends a random message from a anonymous user.')
-async def sendMsg(message):
-
-     if message.author == client.user:
+@bot.command(name="Parrot", help='Sends a random message from a anonymous user.')
+async def Parrot(ctx):
+     parrottedmsg = "I haven't heard anything yet."
+     if ctx.author == bot.user:
           return
-     
-     if message.content == "polly" or message.content == "Polly":
           #have it search inside of the array
-          try:     
-               randmsg = rand.randint(0,UserArr.length)
-               parrottedmsg = UserArr[randmsg]
-               parrottedmsg = rand.choice(parrottedmsg)
-          except:    
-               if parrottedmsg == None:
-                    await asyncio.sleep(rand.uniform(2,3))
-                    message.channel.send("I haven't heard anything yet. SQUAWK!")
-
-          await asyncio.sleep(rand.uniform(5,9))
-          await message.channel.send(parrottedmsg + " SQUAWK!")
      
-     elif message.content == 'raise-exception':
-          raise discord.DiscordException
+     if not UserArr:
+          await asyncio.sleep(rand.uniform(2,3))
+          ctx.channel.send(parrottedmsg + " SQUAWK!")
+          return
+     else:
+          randmsg = rand.randint(0,len(UserArr))
+          parrottedmsg = UserArr[randmsg]
+               
+     await asyncio.sleep(rand.uniform(5,9))
+     await ctx.channel.send(parrottedmsg + " SQUAWK!")
+     
+     
 
 
 #stitches two random messages together. (make sure that this happens at a space, and not inside of a word)
 @bot.command(name="Stitch", help="Stitches two messages together")
-async def stitch(ctx, message):
+async def stitch(ctx,):
+     ctx.send("I haven't heard anything yet. SQUAWK!")
      #ALRIGHT, If you wanna add this, you need to have the message storage handled first. after that, you can user .split(" ") <- (theres a space inbetween) to split all of them into different strings, and place them into a list. i think you can take it from there.
      #TODO: get two random messages, and then use .split(" "), get random indexes inside of lists, concatenate the strings, and then return them
      try:     
@@ -95,7 +117,7 @@ async def stitch(ctx, message):
      except:    
           if parrottedmsg == None:
                await asyncio.sleep(rand.uniform(2,3))
-               message.channel.send("I haven't heard anything yet. SQUAWK!")
+               ctx.channel.send("I haven't heard anything yet. SQUAWK!")
      #its alive!!!
      frankenparrot = parrottedmsg.split(" ")
 
@@ -106,7 +128,7 @@ async def stitch(ctx, message):
      except:    
           if parrottedmsg == None:
                await asyncio.sleep(rand.uniform(2,3))
-               message.channel.send("I haven't heard anything yet. SQUAWK!")
+               ctx.channel.send("I haven't heard anything yet. SQUAWK!")
      #The most annoying person you know really likes correcting people about this
      FrankenparrotMonster = parrottedmsg.split(" ")
      frankenparrotExperiment = ""
@@ -117,25 +139,35 @@ async def stitch(ctx, message):
           
 
      await asyncio.sleep(rand.uniform(5,10))
-     await message.send(frankenparrotExperiment)
+     await ctx.send(frankenparrotExperiment)
+
 
 #reverses a random users message
 @bot.command(name="Reverse", help="reverses a user's message")
-async def reversal(cxt, message):
+async def reversal(cxt, message: str=None):
+     if message == None:
+          cxt.send("I need some info with the command. SQUAWK!")
      await asyncio.sleep(rand.uniform(5,9))
      await cxt.send(message[::-1])
 
 
 #tells how long a message is to shame chronic yappers
 @bot.command (name="MSGLen", help="returns the length of a message")
-async def MSGLen(cxt, message):
+async def MSGLen(cxt, message:str=None):
+     if message == None:
+          ctx.send("I need a message to take the length of. SQUAWK!")
+     cxt.send("I haven't heard anything yet. SQUAWK!")
      await asyncio.sleep(rand.uniform(5,6))
-     await cxt.send("this message is ", len(message) , " letters long. SQUAWK!")
+     messagelength =("This message is "+  str(len(message)) + " letters long. SQUAWK!")
+     await cxt.send(messagelength)
+
 
 #repeats what the user passed to it.
-@bot.command()
-async def repeat(ctx, msg):
+@bot.command(name='Repeat')
+async def repeat(ctx, message):
+     if message == None:
+          ctx.send("I need a message to repeat. SQUAWK!")
      await asyncio.sleep(rand.uniform(3,4))
-     await ctx.send(msg)
+     await ctx.send(message)
 
-client.run(TOKEN)
+bot.run(os.getenv("DISCORD_TOKEN"))
