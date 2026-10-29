@@ -1,9 +1,3 @@
-#TODO: The long and short of the issue is that the .env file is jsut giving me the wrong key for some reason. that and the fact that I don't know how to call commands
-#TODO: fix the commands. after thats done, i can push.
-
-
-#Make sure to have the commands with arguments return stuff
-
 # parrbot.py
 import os, random as rand
 import discord
@@ -29,7 +23,6 @@ bot = commands.Bot(command_prefix ='$', intents= intent)
 #this array holds usernames. 
 UserArr = []
 
-#TODO: are emojis working????
 #allows user to prompt out of polly's shenanigans
 @bot.event
 async def on_member_join(member):
@@ -88,74 +81,59 @@ async def Parrot(ctx):
      parrottedmsg = "I haven't heard anything yet."
      if ctx.author == bot.user:
           return
-          #have it search inside of the array
-     
+
      if not UserArr:
-          await asyncio.sleep(rand.uniform(2,3))
           ctx.channel.send(parrottedmsg + " SQUAWK!")
           return
+
      else:
           randmsg = rand.randint(0,len(UserArr))
           parrottedmsg = UserArr[randmsg]
-               
-     await asyncio.sleep(rand.uniform(5,9))
+
      await ctx.channel.send(parrottedmsg + " SQUAWK!")
      
      
 
 
-#stitches two random messages together. (make sure that this happens at a space, and not inside of a word)
-@bot.command(name="Stitch", help="Stitches two messages together")
-async def stitch(ctx,):
-     ctx.send("I haven't heard anything yet. SQUAWK!")
-     #ALRIGHT, If you wanna add this, you need to have the message storage handled first. after that, you can user .split(" ") <- (theres a space inbetween) to split all of them into different strings, and place them into a list. i think you can take it from there.
-     #TODO: get two random messages, and then use .split(" "), get random indexes inside of lists, concatenate the strings, and then return them
-     try:     
-          randmsg = rand.randint(0,UserArr.length)
-          parrottedmsg = UserArr[randmsg]
-          parrottedmsg = rand.choice(parrottedmsg)
-     except:    
-          if parrottedmsg == None:
-               await asyncio.sleep(rand.uniform(2,3))
-               ctx.channel.send("I haven't heard anything yet. SQUAWK!")
-     #its alive!!!
-     frankenparrot = parrottedmsg.split(" ")
-
-     try:     
-          randmsg = rand.randint(0,UserArr.length)
-          parrottedmsg = UserArr[randmsg]
-          parrottedmsg = rand.choice(parrottedmsg)
-     except:    
-          if parrottedmsg == None:
-               await asyncio.sleep(rand.uniform(2,3))
-               ctx.channel.send("I haven't heard anything yet. SQUAWK!")
-     #The most annoying person you know really likes correcting people about this
-     FrankenparrotMonster = parrottedmsg.split(" ")
-     frankenparrotExperiment = ""
-     for i in range (0,5):
-          randIndex = rand.randint(0, frankenparrot.length)
-          frankenparrotExperiment = frankenparrotExperiment + frankenparrot[randIndex] 
-          frankenparrotExperiment = frankenparrotExperiment + FrankenparrotMonster[randIndex]
+#stitches random messages together. (make sure that this happens at a space, and not inside of a word)
+@bot.command(name="Stitch", help="Stitches two messages together.")
+async def stitch(ctx):
+     parrottedmsg = "I haven't heard enough stuff yet."
+     frankmsg = ""
+     if ctx.author == bot.user:
+          return
           
-
-     await asyncio.sleep(rand.uniform(5,10))
-     await ctx.send(frankenparrotExperiment)
-
+     if not UserArr:
+          ctx.channel.send(parrottedmsg + " SQUAWK!")
+          
+     else:
+          for i in range(2):
+               if (len(UserArr) < i):
+                    await ctx.channel.send("I don't have enough messages to stitch. SQUAWK!") 
+                    return
+               
+               randmsg = rand.randint(0,len(UserArr))
+               frankmsg = frankmsg + " " + UserArr[randmsg].split(" ")
+     
+     frankmsg = frankmsg + "."               
+     await asyncio.sleep(rand.uniform(5,9))
+     await ctx.channel.send(parrottedmsg + " SQUAWK!")
 
 #reverses a random users message
-@bot.command(name="Reverse", help="reverses a user's message")
+@bot.command(name="Reverse", help="Reverses a user's message.")
 async def reversal(cxt, message: str=None):
      if message == None:
-          cxt.send("I need some info with the command. SQUAWK!")
+          await cxt.send("I need some info with the command. SQUAWK!")
+          return
      await asyncio.sleep(rand.uniform(5,9))
      await cxt.send(message[::-1])
 
 
 #tells how long a message is to shame chronic yappers
-@bot.command (name="MSGLen", help="returns the length of a message")
+@bot.command (name="MSGLen", help="Returns the length of a message")
 async def MSGLen(cxt, message:str=None):
      if message == None:
-          ctx.send("I need a message to take the length of. SQUAWK!")
+          await cxt.send("I need a message to take the length of. SQUAWK!")
      cxt.send("I haven't heard anything yet. SQUAWK!")
      await asyncio.sleep(rand.uniform(5,6))
      messagelength =("This message is "+  str(len(message)) + " letters long. SQUAWK!")
@@ -163,7 +141,7 @@ async def MSGLen(cxt, message:str=None):
 
 
 #repeats what the user passed to it.
-@bot.command(name='Repeat')
+@bot.command(name='Repeat', help="Repeats the message that you gave it.")
 async def repeat(ctx, message):
      if message == None:
           ctx.send("I need a message to repeat. SQUAWK!")
