@@ -27,11 +27,19 @@ UserArr = []
 @bot.event
 async def on_member_join(member):
      UserIsOptin = True
-     await member.create_dm()
-     await asyncio.sleep(rand.uniform(5,9))
-     await member.dm_channel.send(f"SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
-     if discord.on_reaction_add(":heavy_multiplication_x:", member) or discord.on_reaction_add(":x:", member) or discord.on_reaction_add(":regional_indicator_x:",member):
-          UserIsOptin = False
+     dm = await member.create_dm()
+     await dm.send("SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
+     reaction, user = await bot.wait_for("reaction_add")
+     def check(reaction):
+          return (reaction == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:")
+          
+     try :
+          reaction, user = await bot.wait_for ('reaction_add', timeout = 60.0, chech=check)
+     except asyncio.TimeoutError:
+          await dm.send("You took too long. SQUAWK!")
+     else:
+          await dm.send("I hear ya! SQUAWK!")
+          
      if UserIsOptin == True:
           UserArr.append(member)
 
