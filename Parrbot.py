@@ -21,7 +21,7 @@ intent.message_content = True
 bot = commands.Bot(command_prefix ='$', intents= intent)
 
 #this array holds usernames. 
-UserArr = ["test", "Testing stuff", "another Test", "Test again"]
+UserArr = []
 
 #allows user to prompt out of polly's shenanigans
 @bot.event
