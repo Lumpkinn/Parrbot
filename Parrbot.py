@@ -48,7 +48,7 @@ async def on_message(message):
      #if ctx.author == client.user:
      #     print ("huh")
      #     return
-     pollychance = rand.randint(1,10)
+     pollychance = rand.randrange(1,10)
      print(pollychance)
      if message.content[0] == '!':
           return
@@ -83,11 +83,11 @@ async def Parrot(ctx):
           return
 
      if not UserArr:
-          ctx.channel.send(parrottedmsg + " SQUAWK!")
+          await ctx.channel.send(parrottedmsg + " SQUAWK!")
           return
 
      else:
-          randmsg = rand.randint(0,len(UserArr))
+          randmsg = rand.randrange(0,len(UserArr))
           parrottedmsg = UserArr[randmsg]
 
      await ctx.channel.send(parrottedmsg + " SQUAWK!")
@@ -112,9 +112,9 @@ async def stitch(ctx):
                     await ctx.channel.send("I don't have enough messages to stitch. SQUAWK!") 
                     return
                
-               randmsg = rand.randint(0,len(UserArr))
+               randmsg = rand.randrange(0,len(UserArr))
                frankPart = UserArr[randmsg].split(" ")
-               frankmsg = frankmsg + " " + frankPart[rand.randint(1, len(frankPart))]
+               frankmsg = frankmsg + " " + frankPart[rand.randrange(1, len(frankPart))]
      
      frankmsg = frankmsg + "."               
      await asyncio.sleep(rand.uniform(5,9))
