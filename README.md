@@ -2,6 +2,8 @@
 
 A small discord bot that remembers messages, and parrots them off when prompted.
 
+Made for Hack Club's Crescent.
+
 <h1>Functions</h1>
 <li>
   <ul>Random message memory</ul>
@@ -18,7 +20,22 @@ To add the bot to a server, use this <a href="https://discord.com/oauth2/authori
 
 For a list of commands, type "$help" (Commands are case sensitive, so be careful!) 
 
-<h4>Attributions</h4>
+<h4>Running your own copy</h4>
+First, create an app on the <a href="https://discord.com/developers">discord developer portal</a>
+
+Second, clone this repository. (For some of you less tech savvy people, click on the green button at the top of the screen, and then click download zip.)
+
+Thirdly, after you sign into the Discord Dev portal, create a new bot, and then get an API key. Create a file in the same folder as the rest of the repository, and call it .env. Inside of the file, write this : DISCORD_TOKEN = "Bot Token Goes Here" (Just to be sure, make sure to paste the API key you got from the portal inbetween the quotes.)
+
+Next, you'll need to invite the bot to your server. You can do this using the OAuth2 URL.
+
+Lastly, run the file. (If it isn't working, try installing the missing packages, and then run the file again.) 
+
+The bot should show up as online, and then you can do whatever you want from there!
+
+PS: If you're having any issues, google is your friend!
+
+<h5>Attributions</h5>
 
 All art made by me
 
