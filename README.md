@@ -35,6 +35,9 @@ The bot should show up as online, and then you can do whatever you want from the
 
 PS: If you're having any issues, google is your friend!
 
+If you just wanna test the bot, feel free to do it here!
+https://discord.gg/EdrJrCFMC
+
 <h5>Attributions</h5>
 
 All art made by me
