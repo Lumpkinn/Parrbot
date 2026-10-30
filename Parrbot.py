@@ -45,18 +45,14 @@ async def on_ready():
 @bot.event
 async def on_message(message):
      
-     #if ctx.author == client.user:
-     #     print ("huh")
-     #     return
-     pollychance = rand.randrange(1,10)
-     print(pollychance)
-     if message.content[0] == '!':
+     if message.author == bot.user:
           return
+     pollychance = rand.randrange(1,10)
      if pollychance == 1:     
           #stores message to a text file
           UserArr.append(str(message.content))
           await message.add_reaction('🦜')
-     print(UserArr) 
+
      await bot.process_commands(message)
  
 @bot.command()
@@ -65,15 +61,6 @@ async def ping(ctx):
     latency = round(bot.latency * 1000)  # Latency in milliseconds
     await ctx.send(f'Pong! {latency}ms')
                 
-#test
-@bot.event
-async def message(ctx, message):
-     botMessage = (str(message.author), ' just said ', str(message.content))
-     print(botMessage)
-     
-          
-     await bot.process_commands(message)
-
 
 #Random message getter 
 @bot.command(name="Parrot", help='Sends a random message from a anonymous user.')
@@ -105,6 +92,7 @@ async def stitch(ctx):
           
      if not UserArr:
           await ctx.channel.send(parrottedmsg + " SQUAWK!")
+          return
           
      else:
           for i in range(2):
@@ -114,10 +102,8 @@ async def stitch(ctx):
                
                randmsg = rand.randrange(0,len(UserArr))
                frankPart = UserArr[randmsg].split(" ")
-               frankmsg = frankmsg + " " + frankPart[rand.randrange(1, len(frankPart))]
-     
-     frankmsg = frankmsg + "."               
-     await asyncio.sleep(rand.uniform(5,9))
+               frankmsg = frankmsg + " " + frankPart[rand.randrange(0, len(frankPart))]
+               
      await ctx.channel.send(frankmsg+ " SQUAWK!")
 
 #reverses a random users message
