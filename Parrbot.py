@@ -21,6 +21,7 @@ intent.message_content = True
 bot = commands.Bot(command_prefix ='$', intents= intent)
 
 #this array holds usernames. 
+ExemptUser = []
 UserArr = []
 
 #allows user to prompt out of polly's shenanigans
@@ -39,6 +40,7 @@ async def on_member_join(member):
           await dm.send("You took too long. SQUAWK!")
      else:
           await dm.send("I hear ya! SQUAWK!")
+          ExemptUser.append(member)
 
 
           
@@ -52,8 +54,13 @@ async def on_ready():
 #this is for storing a random message from a user 
 @bot.event
 async def on_message(message):
-     
-     if message.author == bot.user:
+     def checkIfOptIn():
+          for i in ExemptUser:
+               if i == message.author:
+                    return False
+               else:
+                    return True 
+     if message.author == bot.user or checkIfOptIn() == True:
           return
      pollychance = rand.randrange(1,10)
      if pollychance == 1:     
