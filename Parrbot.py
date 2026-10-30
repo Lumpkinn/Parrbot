@@ -17,6 +17,7 @@ intent.reactions = True
 
 intent.message_content = True
 
+intent.members = True
 
 bot = commands.Bot(command_prefix ='$', intents= intent)
 
@@ -146,7 +147,7 @@ async def MSGLen(cxt, *, message:str=None):
 @bot.command(name='Repeat', help="Repeats the message that you gave it.")
 async def repeat(ctx, *, message:str=None):
      if message == None:
-          ctx.send("I need a message to repeat. SQUAWK!")
+          await ctx.send("I need a message to repeat. SQUAWK!")
      await asyncio.sleep(rand.uniform(3,4))
      await ctx.send(message)
 
