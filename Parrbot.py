@@ -34,11 +34,12 @@ async def on_member_join(member):
           return (reaction == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:")
           
      try :
-          reaction, user = await bot.wait_for ('reaction_add', timeout = 60.0, chech=check)
+          reaction, user = await bot.wait_for ('reaction_add', timeout = 60.0, check=check)
      except asyncio.TimeoutError:
           await dm.send("You took too long. SQUAWK!")
      else:
           await dm.send("I hear ya! SQUAWK!")
+
 
           
 
