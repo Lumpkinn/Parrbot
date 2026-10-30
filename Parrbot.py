@@ -21,7 +21,7 @@ intent.message_content = True
 bot = commands.Bot(command_prefix ='$', intents= intent)
 
 #this array holds usernames. 
-UserArr = []
+UserArr = ["test", "Testing stuff", "another Test", "Test again"]
 
 #allows user to prompt out of polly's shenanigans
 @bot.event
@@ -104,7 +104,7 @@ async def stitch(ctx):
           return
           
      if not UserArr:
-          ctx.channel.send(parrottedmsg + " SQUAWK!")
+          await ctx.channel.send(parrottedmsg + " SQUAWK!")
           
      else:
           for i in range(2):
@@ -113,11 +113,12 @@ async def stitch(ctx):
                     return
                
                randmsg = rand.randint(0,len(UserArr))
-               frankmsg = frankmsg + " " + UserArr[randmsg].split(" ")
+               frankPart = UserArr[randmsg].split(" ")
+               frankmsg = frankmsg + " " + frankPart[rand.randint(1, len(frankPart))]
      
      frankmsg = frankmsg + "."               
      await asyncio.sleep(rand.uniform(5,9))
-     await ctx.channel.send(parrottedmsg + " SQUAWK!")
+     await ctx.channel.send(frankmsg+ " SQUAWK!")
 
 #reverses a random users message
 @bot.command(name="Reverse", help="Reverses a user's message.")
@@ -131,12 +132,12 @@ async def reversal(cxt, message: str=None):
 
 #tells how long a message is to shame chronic yappers
 @bot.command (name="MSGLen", help="Returns the length of a message")
-async def MSGLen(cxt, message:str=None):
+async def MSGLen(cxt, *, message:str=None):
      if message == None:
           await cxt.send("I need a message to take the length of. SQUAWK!")
-     cxt.send("I haven't heard anything yet. SQUAWK!")
+          return
      await asyncio.sleep(rand.uniform(5,6))
-     messagelength =("This message is "+  str(len(message)) + " letters long. SQUAWK!")
+     messagelength =("This message is "+  str(len(message)) + " characters long. SQUAWK!")
      await cxt.send(messagelength)
 
 
