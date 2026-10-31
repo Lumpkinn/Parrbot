@@ -59,8 +59,7 @@ async def on_message(message):
           for i in ExemptUser:
                if i == message.author:
                     return False
-               else:
-                    return True 
+          return True
      if message.author == bot.user or checkIfOptIn() == True:
           return
      pollychance = rand.randrange(1,10)
@@ -148,6 +147,7 @@ async def MSGLen(cxt, *, message:str=None):
 async def repeat(ctx, *, message:str=None):
      if message == None:
           await ctx.send("I need a message to repeat. SQUAWK!")
+          return
      await asyncio.sleep(rand.uniform(3,4))
      await ctx.send(message)
 
