@@ -31,12 +31,11 @@ UserArr = []
 async def on_member_join(member):
      dm = await member.create_dm()
      await dm.send("SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
-     reaction, user = await bot.wait_for("reaction_add")
      def check(reaction):
           return (reaction == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:")
           
      try :
-          reaction, user = await bot.wait_for ('reaction_add', timeout = 60.0, check=check)
+          reaction = await bot.wait_for('reaction_add', timeout = 60.0, check=check)
      except asyncio.TimeoutError:
           await dm.send("You took too long. SQUAWK!")
      else:
@@ -58,7 +57,7 @@ async def on_message(message):
      def checkIfOptIn():
           for i in ExemptUser:
                if i == message.author:
-                    return False
+                    return True
           return True
      if message.author == bot.user or checkIfOptIn() == True:
           return
