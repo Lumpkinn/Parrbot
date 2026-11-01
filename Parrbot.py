@@ -25,7 +25,7 @@ async def on_member_join(member):
      dm = await member.create_dm()
      await dm.send("SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
      def check(reaction, user):
-          return user.id == member.id and (reaction == "❌" or reaction == "✖️")
+          return user.id == member.id and (str(reaction) == "❌" or str(reaction) == "✖️")
      try :
           reaction = await bot.wait_for('reaction_add', timeout = 60.0, check=check)
      except asyncio.TimeoutError:
