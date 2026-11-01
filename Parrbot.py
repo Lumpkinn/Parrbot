@@ -7,19 +7,12 @@ from discord.ext import commands
 
 load_dotenv()
 
-TOKEN = os.getenv("DISCORD_TOKEN")
-
-GUILD = os.getenv("DISCORD_GUILD")
-
 intent = discord.Intents.default()
-
 intent.reactions = True
-
 intent.message_content = True
-
 intent.members = True
 
-bot = commands.Bot(command_prefix ='$', intents= intent)
+bot = commands.Bot(command_prefix ='$', intents = intent)
 
 #this array holds usernames. 
 ExemptUser = []
@@ -31,7 +24,7 @@ UserArr = []
 async def on_member_join(member):
      dm = await member.create_dm()
      await dm.send("SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
-     def check(reaction):
+     def check(user, reaction):
           return (reaction == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:")
           
      try :
@@ -42,14 +35,10 @@ async def on_member_join(member):
           await dm.send("I hear ya! SQUAWK!")
           ExemptUser.append(member)
 
-
-          
-
 #informs me when bot is connected
 @bot.event
 async def on_ready():
      print(f'{bot.user.name}' + "has connected to discord." '\n f{guild.name}(id: {guild.id})')
-
 
 #this is for storing a random message from a user 
 @bot.event
@@ -57,7 +46,7 @@ async def on_message(message):
      def checkIfOptIn():
           for i in ExemptUser:
                if i == message.author:
-                    return True
+                    return False
           return True
      if message.author == bot.user or checkIfOptIn() == True:
           return
@@ -75,7 +64,6 @@ async def ping(ctx):
     latency = round(bot.latency * 1000)  # Latency in milliseconds
     await ctx.send(f'Pong! {latency}ms')
                 
-
 #Random message getter 
 @bot.command(name="Parrot", help='Sends a random message from a anonymous user.')
 async def Parrot(ctx):
@@ -93,9 +81,6 @@ async def Parrot(ctx):
 
      await ctx.channel.send(parrottedmsg + " SQUAWK!")
      
-     
-
-
 #stitches random messages together. (make sure that this happens at a space, and not inside of a word)
 @bot.command(name="Stitch", help="Stitches two messages together.")
 async def stitch(ctx):
