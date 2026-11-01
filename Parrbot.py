@@ -25,7 +25,7 @@ async def on_member_join(member):
      dm = await member.create_dm()
      await dm.send("SQUAWK! I'm Polly! I like to parrot off what people say! If you don't want me to listen to you, please react to this message with an X. SQUAWK!")
      def check(user, reaction):
-          return (reaction == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:")
+          return (user.id == member.author.id and (str(reaction) == ":heavy_multiplication_x:" or reaction == ":x:" or reaction == ":regional_indicator_x:"))
           
      try :
           reaction = await bot.wait_for('reaction_add', timeout = 60.0, check=check)
